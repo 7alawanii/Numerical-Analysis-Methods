@@ -24,7 +24,7 @@ format long
 
 % Edit the above text to modify the response to help MainGUI1
 
-% Last Modified by GUIDE v2.5 13-Dec-2016 21:44:05
+% Last Modified by GUIDE v2.5 22-Dec-2016 13:31:02
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -141,6 +141,26 @@ function popupmenu1_Callback(hObject, eventdata, handles)
             end
             array = {'iter',iter,array{:}};
         end
+    elseif(strcmp(method,'Beirge Veita'))
+        chosen_method = 'Beirge';
+        set(handles.warning,'Visible','On');
+        input = {'Tolerance','initial'};
+        answer = inputdlg(input,'Beirge Veita (optional)',[1 50]);
+        array = {};
+         array = {'tolerance',0.00001,array{:}};
+        if ~isempty(answer)
+            for i=1:1:2
+                if ~isempty(answer{i})
+                    switch i
+                        case 1
+                            array = {'tolerance',eval(answer{i}),array{:}};
+                        case 2
+                            array = {'initial',eval(answer{i}),array{:}};
+                    end
+                end
+            end
+            array = {'iter',iter,array{:}};
+        end    
     elseif(strcmp(method,'Fixed Point'))
         chosen_method = 'Fixed';
         set(handles.warning,'Visible','On');
@@ -306,7 +326,7 @@ switch chosen_method;
         set(handles.time, 'String', endtime );
    case 'Fixed'
         [root_xi , root_xinew ,time_taken ,counter ,state , ea , rel] = fixed(array,funct);
-        if state == 'converge'
+        if state == '1'
             data={root_xi(1),'--------',root_xinew(1),'--------','--------','--------',ea(1),rel(1)};
             for i = 2:counter
                 data=[data;{root_xi(i),'--------',root_xinew(i),'--------','--------','--------',ea(i),rel(i)}];
@@ -339,6 +359,10 @@ switch chosen_method;
         set(handles.root, 'String', xr(end));
         set(handles.time, 'String', endtime);
         
+    case 'Beirge'
+        [Xna,etime] = BeirgeVeita(array,funct,iter);
+        set(handles.root, 'String', Xna(end));
+        set(handles.time, 'String', etime);
                
 
 end
@@ -439,7 +463,7 @@ switch chosen_method;
    case 'Fixed'
         [root_xi , root_xinew ,time_taken ,counter ,state , ea , rel] = fixed(array,funct);
         if sing_iter <= counter
-        if state == 'converge'
+        if state == '1'
             data={root_xi(1),'--------',root_xinew(1),'--------','--------','--------',ea(1),rel(1)};
             if sing_iter > 1
             for i = 2:sing_iter
@@ -495,4 +519,3 @@ eq=sym(funct);
 f=inline(char(eq));
 t=[-10,10];
 fplot(f,t)
-

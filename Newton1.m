@@ -21,6 +21,13 @@ format long
    for i= 1 : iterations
        iters=[iters i]; 
        newpoint= intialpoint-(f(intialpoint)/fdiff(intialpoint));
+       n=fdiff(intialpoint);
+       if(n==0)
+          
+            errordlg('Fdiff(x)=0......Unsolvable by newton!!');
+            endtime=toc;
+           return
+       end
        fxold=[fxold f(intialpoint)];
        fxnew=[fxnew f(newpoint)];
        xnew=[xnew newpoint];

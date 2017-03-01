@@ -21,10 +21,10 @@ function [ root_xi , root_xinew ,time_taken ,counter ,state , ea , rel ] = fixed
     G_initial = G(initial);
     counter = 0;
     if abs(G_initial)>1
-        state = 'diverge';
+        state = '0';
     else
         start_time = tic;
-        state = 'converge';
+        state = '1';
         for i = 1:1:iter
             counter = i;
             root_xinew(i) = f(root_xi(i));
