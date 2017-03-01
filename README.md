@@ -1,4 +1,4 @@
-# Numerical-Analysis-Methods
+# Root-Finder
 
 A GUI implemented program using Matlab.
 
